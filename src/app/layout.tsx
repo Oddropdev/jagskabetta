@@ -12,6 +12,11 @@ export const metadata: Metadata = {
 
   metadataBase: new URL(`https://${site.brand.domain}`),
 
+  // ✅ Affiliate verification meta tag
+  other: {
+    "ga-site-verification": "bLYdjQVtH6gJ8jSzu4UuUG9G",
+  },
+
   openGraph: {
     title: `${site.copy.h1} - ${site.brand.name}`,
     description: site.brand.description,

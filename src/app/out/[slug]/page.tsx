@@ -1,13 +1,4 @@
-import { deals } from "@/data/deals";
 import { site } from "@/site/site.config";
-import { resolveDealHref } from "@/lib/slug";
-
-function findOgIndex(slug: string) {
-  const idx = deals.findIndex((d) => d.slug === slug);
-  // OG kuvat on og1..og6 → käytetään vain jos slug on 0..5
-  if (idx >= 0 && idx < 6) return idx + 1;
-  return null;
-}
 
 export default async function OutPage({
   params,
@@ -15,96 +6,86 @@ export default async function OutPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const deal = deals.find((d) => d.slug === slug);
-
-  if (!deal) {
-    return (
-      <main className="min-h-screen bg-[#070A12] text-white">
-        <div className="mx-auto max-w-3xl px-4 py-12">
-          <a className="text-sm text-white/70 underline" href="/">
-            ← Tillbaka
-          </a>
-          <h1 className="mt-6 text-2xl font-extrabold">Hittades inte</h1>
-          <p className="mt-2 text-sm text-white/70">
-            Den här sidan finns inte längre.
-          </p>
-        </div>
-      </main>
-    );
-  }
-
-  const ogIndex = findOgIndex(slug);
 
   return (
     <main className="min-h-screen bg-[#070A12] text-white">
-      <div className="mx-auto max-w-3xl px-4 py-10">
-        <a className="text-sm text-white/70 underline" href="/">
-          ← Tillbaka
-        </a>
+      {/* subtle grain + vignette (same style as home) */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 opacity-[0.18]"
+        style={{
+          backgroundImage:
+            "radial-gradient(1200px 700px at 50% 15%, rgba(255,255,255,0.08), transparent 60%), radial-gradient(900px 600px at 20% 10%, rgba(59,130,246,0.10), transparent 60%), radial-gradient(900px 600px at 80% 20%, rgba(250,204,21,0.08), transparent 62%), repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 2px, transparent 6px)",
+        }}
+      />
 
-        <div className="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_18px_55px_rgba(0,0,0,0.55)] backdrop-blur">
-          {ogIndex ? (
-            <div className="relative">
-              <img
-                src={`/og${ogIndex}.png`}
-                alt=""
-                className="h-56 w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-            </div>
-          ) : null}
+      <div className="relative mx-auto max-w-3xl px-4 py-10">
+        <header className="flex items-start justify-between gap-4">
+          <a
+            href="/"
+            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white/80 hover:bg-white/10"
+          >
+            ← Tillbaka
+          </a>
 
-          <div className="p-6">
-            <div className="flex items-center gap-2">
-              <span className="text-xl" aria-hidden>
-                {deal.logo}
-              </span>
-              <h1 className="text-2xl font-extrabold">{deal.name}</h1>
-            </div>
+          <a
+            href={site.links.privacy}
+            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white/80 hover:bg-white/10"
+          >
+            Integritet
+          </a>
+        </header>
 
-            <p className="mt-3 text-sm text-white/85">{deal.offer}</p>
-            <p className="mt-1 text-xs text-white/60">{deal.terms}</p>
+        <section className="mt-10 overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_18px_55px_rgba(0,0,0,0.55)] backdrop-blur">
+          <div className="text-xs font-semibold text-white/60">ID: {slug}</div>
 
-            <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="text-sm font-extrabold">Coming soon</div>
-              <p className="mt-1 text-sm text-white/70">
-                Den här informationssidan är under uppbyggnad. Vi lägger till mer
-                innehåll och jämförelser snart.
-              </p>
-            </div>
+          <h1 className="mt-3 text-4xl font-extrabold tracking-tight">
+            Coming soon
+          </h1>
 
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={resolveDealHref(deal.slug)}
-                className="inline-flex w-full items-center justify-center rounded-2xl bg-yellow-300 px-5 py-3 text-sm font-extrabold text-slate-900 hover:bg-yellow-200"
-              >
-                {site.mode === "live" ? site.copy.cta : site.copy.cta_demo}
-              </a>
+          <p className="mt-3 text-sm text-white/75">
+            Den här sidan är under uppbyggnad. Vi fyller på mer info snart.
+          </p>
 
-              <a
-                href="/"
-                className="inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-extrabold text-white/85 hover:bg-white/10"
-              >
-                Till listan
-              </a>
-            </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="/#kort"
+              className="rounded-2xl bg-yellow-300 px-6 py-3 text-sm font-extrabold text-slate-900 hover:bg-yellow-200"
+            >
+              Till erbjudanden
+            </a>
 
-            <div className="mt-6 text-xs text-white/60">
-              {site.copy.disclosure}
-            </div>
+            <a
+              href={`mailto:${site.copy.email}`}
+              className="rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-extrabold text-white/85 hover:bg-white/10"
+            >
+              Kontakta oss
+            </a>
           </div>
-        </div>
 
-        <footer className="mt-8 text-center text-xs text-white/60">
-          <div>{site.copy.footer_rg}</div>
-          <div className="mt-2">
+          <div className="mt-6 text-[11px] text-white/60">
+            18+ · Spela ansvarsfullt · {site.copy.disclosure}
+          </div>
+        </section>
+
+        <footer className="mt-10 border-t border-white/10 pt-6 text-xs text-white/65">
+          <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+            <span className="font-semibold text-white/80">{site.copy.footer_rg}</span>
+            <span className="text-white/30">·</span>
             <a className="underline" href={site.links.stodlinjen} target="_blank" rel="noreferrer">
               Stödlinjen
-            </a>{" "}
-            ·{" "}
+            </a>
+            <span className="text-white/30">·</span>
             <a className="underline" href={site.links.spelpaus} target="_blank" rel="noreferrer">
               Spelpaus
             </a>
+          </div>
+
+          <div className="mt-2 text-center">{site.copy.disclosure}</div>
+
+          <div className="mt-2 text-center">
+            <a className="underline" href={site.links.privacy}>Integritet</a> ·{" "}
+            <a className="underline" href={`mailto:${site.copy.email}`}>{site.copy.email}</a>
           </div>
         </footer>
       </div>

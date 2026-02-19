@@ -158,10 +158,10 @@ export default function Home() {
         {/* Hero */}
         <section className="mx-auto mt-10 max-w-3xl text-center">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-            DIN SPORTKOLL BÖRJAR HÄR.
+            BÄSTA ERBJUDANDEN & BONUSAR
           </h1>
           <p className="mt-3 text-sm text-white/75">
-            Speltips, jämförelser och snabba översikter – i samma flöde.
+            Snabb översikt av aktuella erbjudanden och kampanjer. Tydliga villkor. 18+.
           </p>
 
           <div className="mt-6 flex justify-center">
@@ -169,7 +169,7 @@ export default function Home() {
               href={top[0] ? resolveDealHref(top[0].slug) : "/"}
               className="rounded-2xl bg-yellow-300 px-6 py-3 text-sm font-extrabold text-slate-900 shadow-[0_18px_55px_rgba(0,0,0,0.55)] hover:bg-yellow-200"
             >
-              {site.mode === "live" ? "KOLLA LÄGET NU" : "KOLLA LÄGET (DEMO)"}
+              {site.mode === "live" ? "SE ERBJUDANDEN" : "SE ERBJUDANDEN (DEMO)"}
             </a>
           </div>
 
@@ -198,7 +198,9 @@ export default function Home() {
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    <div className={`absolute left-3 top-3 rounded-xl px-3 py-1 text-[11px] font-extrabold shadow-sm ${tag.cls}`}>
+                    <div
+                      className={`absolute left-3 top-3 rounded-xl px-3 py-1 text-[11px] font-extrabold shadow-sm ${tag.cls}`}
+                    >
                       {tag.text}
                     </div>
                   </div>
@@ -207,9 +209,9 @@ export default function Home() {
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="truncate text-base font-extrabold">{d.name}</div>
-                      <div className="mt-2 text-sm text-white/85">{d.offer}</div>
-                      <div className="mt-1 text-xs text-white/60">{d.terms}</div>
+                      <div className="truncate text-base font-extrabold">Coming soon</div>
+                      <div className="mt-2 text-sm text-white/85">Coming soon</div>
+                      <div className="mt-1 text-xs text-white/60">Mer info kommer snart.</div>
                     </div>
 
                     <a

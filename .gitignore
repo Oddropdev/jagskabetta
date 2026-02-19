@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+AFFILIATE_APPLICATION.txt
+CHECKLIST_AFFILIATE_READY.txt

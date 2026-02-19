@@ -13,7 +13,7 @@ export const site = {
     cta_demo: "Läs mer (demo)",
     disclosure: "Reklam/Affiliate: Vi kan få provision via länkar utan extra kostnad för dig.",
     footer_rg: "18+ | Spela ansvarsfullt",
-    email: "kontakt@jagskabetta.com",
+    email: "socialzoy@gmail.com",
   },
   links: {
     privacy: "/integritet",

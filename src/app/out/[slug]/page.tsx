@@ -5,11 +5,10 @@ export default async function OutPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
+  await params; // slug not shown (keeps route compatible)
 
   return (
     <main className="min-h-screen bg-[#070A12] text-white">
-      {/* subtle grain + vignette (same style as home) */}
       <div
         aria-hidden
         className="pointer-events-none fixed inset-0 opacity-[0.18]"
@@ -37,11 +36,7 @@ export default async function OutPage({
         </header>
 
         <section className="mt-10 overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_18px_55px_rgba(0,0,0,0.55)] backdrop-blur">
-          <div className="text-xs font-semibold text-white/60">ID: {slug}</div>
-
-          <h1 className="mt-3 text-4xl font-extrabold tracking-tight">
-            Coming soon
-          </h1>
+          <h1 className="text-4xl font-extrabold tracking-tight">Coming soon</h1>
 
           <p className="mt-3 text-sm text-white/75">
             Den här sidan är under uppbyggnad. Vi fyller på mer info snart.
@@ -84,8 +79,13 @@ export default async function OutPage({
           <div className="mt-2 text-center">{site.copy.disclosure}</div>
 
           <div className="mt-2 text-center">
-            <a className="underline" href={site.links.privacy}>Integritet</a> ·{" "}
-            <a className="underline" href={`mailto:${site.copy.email}`}>{site.copy.email}</a>
+            <a className="underline" href={site.links.privacy}>
+              Integritet
+            </a>{" "}
+            ·{" "}
+            <a className="underline" href={`mailto:${site.copy.email}`}>
+              {site.copy.email}
+            </a>
           </div>
         </footer>
       </div>

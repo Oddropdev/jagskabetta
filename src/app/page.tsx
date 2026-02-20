@@ -1,18 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { deals } from "@/data/deals";
 import { site } from "@/site/site.config";
-import { resolveDealHref } from "@/lib/slug";
 
-const TAGS = [
-  { text: "SENASTE", cls: "bg-yellow-300 text-slate-900" },
-  { text: "TOPPVAL", cls: "bg-sky-500 text-slate-900" },
-  { text: "ERBJUDANDE", cls: "bg-orange-500 text-slate-900" },
-  { text: "REKAR", cls: "bg-white text-slate-900" },
-  { text: "VERIFIERAT", cls: "bg-emerald-400 text-slate-900" },
-  { text: "HOCKEY", cls: "bg-amber-500 text-slate-900" },
-];
+const AFFILIATE_URL =
+  "https://media.comeon.com/tracking.php?tracking_code&aid=121093&mid=1782&sid=461196&pid=400";
 
 function TextLogo({ size = "md" }: { size?: "md" | "lg" }) {
   const cls = size === "lg" ? "text-2xl leading-[0.95]" : "text-xl leading-[0.95]";
@@ -28,7 +20,6 @@ function TextLogo({ size = "md" }: { size?: "md" | "lg" }) {
 }
 
 export default function Home() {
-  const top = deals.slice(0, 6);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -83,14 +74,6 @@ export default function Home() {
 
               <a
                 className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 hover:bg-white/10"
-                href="#kort"
-                onClick={() => setMenuOpen(false)}
-              >
-                Bonusar
-              </a>
-
-              <a
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 hover:bg-white/10"
                 href={site.links.privacy}
                 onClick={() => setMenuOpen(false)}
               >
@@ -109,7 +92,7 @@ export default function Home() {
         </div>
       ) : null}
 
-      <div className="relative mx-auto max-w-6xl px-4 py-8">
+      <div className="relative mx-auto max-w-5xl px-4 py-8">
         {/* Top bar */}
         <header className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -127,12 +110,6 @@ export default function Home() {
             </a>
 
             <nav className="ml-6 hidden items-center gap-6 text-xs font-semibold text-white/75 sm:flex">
-              <a className="hover:text-white" href="/">
-                HEM
-              </a>
-              <a className="hover:text-white" href="#kort">
-                BONUSAR
-              </a>
               <a className="hover:text-white" href={site.links.privacy}>
                 INTEGRITET
               </a>
@@ -156,7 +133,7 @@ export default function Home() {
         </header>
 
         {/* Hero */}
-        <section className="mx-auto mt-10 max-w-3xl text-center">
+        <section className="mx-auto mt-10 max-w-2xl text-center">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
             BÄSTA ERBJUDANDEN & BONUSAR
           </h1>
@@ -166,10 +143,12 @@ export default function Home() {
 
           <div className="mt-6 flex justify-center">
             <a
-              href={top[0] ? resolveDealHref(top[0].slug) : "/"}
+              href={AFFILIATE_URL}
+              target="_blank"
+              rel="noreferrer nofollow sponsored"
               className="rounded-2xl bg-yellow-300 px-6 py-3 text-sm font-extrabold text-slate-900 shadow-[0_18px_55px_rgba(0,0,0,0.55)] hover:bg-yellow-200"
             >
-              {site.mode === "live" ? "SE ERBJUDANDEN" : "SE ERBJUDANDEN (DEMO)"}
+              SE ERBJUDANDE
             </a>
           </div>
 
@@ -178,60 +157,38 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 6 cards */}
-        <section id="kort" className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {top.map((d, idx) => {
-            const tag = TAGS[idx] ?? TAGS[0];
-            const infoHref = `/out/${d.slug}`;
+        {/* Single card = full 16:9 OG (no extra text area) */}
+        <section className="mx-auto mt-10 max-w-3xl">
+          <a
+            href={AFFILIATE_URL}
+            target="_blank"
+            rel="noreferrer nofollow sponsored"
+            className="group block overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_18px_55px_rgba(0,0,0,0.55)] backdrop-blur"
+          >
+            <div className="relative">
+              <div className="aspect-video w-full bg-black/25">
+                <img
+                  src="/og1.png"
+                  alt=""
+                  className="h-full w-full object-contain"
+                  loading="lazy"
+                />
+              </div>
 
-            return (
-              <article
-                key={d.slug}
-                className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_18px_55px_rgba(0,0,0,0.55)] backdrop-blur"
-              >
-                <a href={infoHref} className="block">
-                  <div className="relative">
-                    <img
-                      src={`/og${idx + 1}.png`}
-                      alt=""
-                      className="h-44 w-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    <div
-                      className={`absolute left-3 top-3 rounded-xl px-3 py-1 text-[11px] font-extrabold shadow-sm ${tag.cls}`}
-                    >
-                      {tag.text}
-                    </div>
-                  </div>
-                </a>
+              {/* subtle hover sheen */}
+              <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+              </div>
 
-                <div className="p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="truncate text-base font-extrabold">Coming soon</div>
-                      <div className="mt-2 text-sm text-white/85">Coming soon</div>
-                      <div className="mt-1 text-xs text-white/60">Mer info kommer snart.</div>
-                    </div>
+              <div className="absolute left-3 top-3 rounded-xl bg-yellow-300 px-3 py-1 text-[11px] font-extrabold text-slate-900 shadow-sm">
+                ERBJUDANDE
+              </div>
 
-                    <a
-                      href={infoHref}
-                      className="shrink-0 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/80 hover:bg-white/10"
-                    >
-                      Läs mer
-                    </a>
-                  </div>
-
-                  <a
-                    href={resolveDealHref(d.slug)}
-                    className="mt-4 inline-flex w-full items-center justify-center rounded-2xl bg-yellow-300 px-4 py-3 text-sm font-extrabold text-slate-900 hover:bg-yellow-200"
-                  >
-                    {site.mode === "live" ? site.copy.cta : site.copy.cta_demo}
-                  </a>
-                </div>
-              </article>
-            );
-          })}
+              <div className="absolute bottom-3 right-3 rounded-xl bg-black/45 px-3 py-2 text-xs font-semibold text-white/90 backdrop-blur">
+                Klicka för att öppna →
+              </div>
+            </div>
+          </a>
         </section>
 
         {/* Footer */}
@@ -251,8 +208,13 @@ export default function Home() {
           <div className="mt-2 text-center">{site.copy.disclosure}</div>
 
           <div className="mt-2 text-center">
-            <a className="underline" href={site.links.privacy}>Integritet</a> ·{" "}
-            <a className="underline" href="/kontakt">Kontakt</a>
+            <a className="underline" href={site.links.privacy}>
+              Integritet
+            </a>{" "}
+            ·{" "}
+            <a className="underline" href="/kontakt">
+              Kontakt
+            </a>
           </div>
         </footer>
       </div>

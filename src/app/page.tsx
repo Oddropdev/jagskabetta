@@ -2,9 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { site } from "@/site/site.config";
+import { deals } from "@/data/deals";
 
-const AFFILIATE_URL =
-  "https://media.comeon.com/tracking.php?tracking_code&aid=121093&mid=1782&sid=461196&pid=400";
+const URLS = [
+  // og1
+  "https://media.comeon.com/tracking.php?tracking_code&aid=121093&mid=1782&sid=461196&pid=400",
+  // og2 (sport)
+  "https://media.hajper.com/tracking.php?tracking_code&aid=121093&mid=9611&sid=461196&pid=3694",
+  // og3
+  "https://media.lyllocasino.com/tracking.php?tracking_code&aid=121093&mid=6291&sid=461196&pid=2847",
+  // og4
+  "https://media.snabbare.com/tracking.php?tracking_code&aid=121093&mid=1960&sid=461196&pid=635",
+  // og5
+  "https://media.casinostugan.com/tracking.php?tracking_code&aid=121093&mid=9507&sid=461196&pid=850",
+  // og6
+  "https://media.hajper.com/tracking.php?tracking_code&aid=121093&mid=1968&sid=461196&pid=743",
+] as const;
 
 function TextLogo({ size = "md" }: { size?: "md" | "lg" }) {
   const cls = size === "lg" ? "text-2xl leading-[0.95]" : "text-xl leading-[0.95]";
@@ -19,8 +32,15 @@ function TextLogo({ size = "md" }: { size?: "md" | "lg" }) {
   );
 }
 
+function tagForIndex(idx: number) {
+  if (idx === 0) return { text: "ERBJUDANDE", cls: "bg-yellow-300 text-slate-900" };
+  if (idx === 1) return { text: "SPORT", cls: "bg-sky-500 text-slate-900" };
+  return { text: "CASINO", cls: "bg-white text-slate-900" };
+}
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const top = deals.slice(0, 6);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -32,7 +52,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#070A12] text-white">
-      {/* subtle grain + vignette */}
       <div
         aria-hidden
         className="pointer-events-none fixed inset-0 opacity-[0.18]"
@@ -42,7 +61,6 @@ export default function Home() {
         }}
       />
 
-      {/* Mobile menu overlay */}
       {menuOpen ? (
         <div className="fixed inset-0 z-50">
           <button
@@ -74,6 +92,14 @@ export default function Home() {
 
               <a
                 className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 hover:bg-white/10"
+                href="/erbjudanden"
+                onClick={() => setMenuOpen(false)}
+              >
+                Alla erbjudanden
+              </a>
+
+              <a
+                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 hover:bg-white/10"
                 href={site.links.privacy}
                 onClick={() => setMenuOpen(false)}
               >
@@ -92,8 +118,7 @@ export default function Home() {
         </div>
       ) : null}
 
-      <div className="relative mx-auto max-w-5xl px-4 py-8">
-        {/* Top bar */}
+      <div className="relative mx-auto max-w-6xl px-4 py-8">
         <header className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
@@ -110,6 +135,9 @@ export default function Home() {
             </a>
 
             <nav className="ml-6 hidden items-center gap-6 text-xs font-semibold text-white/75 sm:flex">
+              <a className="hover:text-white" href="/erbjudanden">
+                ERBJUDANDEN
+              </a>
               <a className="hover:text-white" href={site.links.privacy}>
                 INTEGRITET
               </a>
@@ -132,7 +160,6 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Hero */}
         <section className="mx-auto mt-10 max-w-2xl text-center">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
             BÄSTA ERBJUDANDEN & BONUSAR
@@ -141,14 +168,21 @@ export default function Home() {
             Snabb översikt av aktuella erbjudanden och kampanjer. Tydliga villkor. 18+.
           </p>
 
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
             <a
-              href={AFFILIATE_URL}
+              href={URLS[0]}
               target="_blank"
               rel="noreferrer nofollow sponsored"
               className="rounded-2xl bg-yellow-300 px-6 py-3 text-sm font-extrabold text-slate-900 shadow-[0_18px_55px_rgba(0,0,0,0.55)] hover:bg-yellow-200"
             >
               SE ERBJUDANDE
+            </a>
+
+            <a
+              href="/erbjudanden"
+              className="rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-extrabold text-white/85 hover:bg-white/10"
+            >
+              Se alla erbjudanden
             </a>
           </div>
 
@@ -157,41 +191,40 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Single card = full 16:9 OG (no extra text area) */}
-        <section className="mx-auto mt-10 max-w-3xl">
-          <a
-            href={AFFILIATE_URL}
-            target="_blank"
-            rel="noreferrer nofollow sponsored"
-            className="group block overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_18px_55px_rgba(0,0,0,0.55)] backdrop-blur"
-          >
-            <div className="relative">
-              <div className="aspect-video w-full bg-black/25">
-                <img
-                  src="/og1.png"
-                  alt=""
-                  className="h-full w-full object-contain"
-                  loading="lazy"
-                />
-              </div>
+        <section className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {top.map((d, idx) => {
+            const tag = tagForIndex(idx);
+            const img = `/og${idx + 1}.png`;
+            const href = URLS[idx] ?? URLS[0];
 
-              {/* subtle hover sheen */}
-              <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
-              </div>
+            return (
+              <a
+                key={d.slug}
+                href={href}
+                target="_blank"
+                rel="noreferrer nofollow sponsored"
+                className="group block overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_18px_55px_rgba(0,0,0,0.55)] backdrop-blur"
+              >
+                <div className="relative">
+                  <div className="aspect-video w-full bg-black/25">
+                    <img src={img} alt="" className="h-full w-full object-contain" loading="lazy" />
+                  </div>
 
-              <div className="absolute left-3 top-3 rounded-xl bg-yellow-300 px-3 py-1 text-[11px] font-extrabold text-slate-900 shadow-sm">
-                ERBJUDANDE
-              </div>
+                  <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+                  </div>
 
-              <div className="absolute bottom-3 right-3 rounded-xl bg-black/45 px-3 py-2 text-xs font-semibold text-white/90 backdrop-blur">
-                Klicka för att öppna →
-              </div>
-            </div>
-          </a>
+                  <div
+                    className={`absolute left-3 top-3 rounded-xl px-3 py-1 text-[11px] font-extrabold shadow-sm ${tag.cls}`}
+                  >
+                    {tag.text}
+                  </div>
+                </div>
+              </a>
+            );
+          })}
         </section>
 
-        {/* Footer */}
         <footer className="mt-10 border-t border-white/10 pt-6 text-xs text-white/65">
           <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
             <span className="font-semibold text-white/80">{site.copy.footer_rg}</span>
